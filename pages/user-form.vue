@@ -2,22 +2,32 @@
 <template>
     <h1 class="title"><span>&#9728;</span> Validation User Form <span>&#9728;</span></h1>
     <div>
-    <input :class="{'valid': isValidEmail === true , 'invalid': isValidEmail === false }"
+    <input :class="{'valid': isValidEmail === true, 'invalid': isValidEmail === false || (startValidationColor.email && !isValidEmail)}"
      v-model="user.email" type="text" placeholder="Email.."> <span class="spanCheckEmail" v-if="isValidEmail">&#10003;</span>
       <br>
-    <div  v-if="user.email != '' && !isValidEmail && isValidEmail.valueOf(null) ">Invalid email address!</div> <br>
-    <input :class="{'valid': isStrongPassword === true , 'invalid': isStrongPassword === false }"
-     v-model="user.password" type="text" placeholder="Password.."> <br>
+    <div  v-if="user.email != '' && !isValidEmail ">Invalid email address!</div> <br>
+
+    <input :class="{'valid': isStrongPassword === true , 'invalid': isStrongPassword === false  || (startValidationColor.password && !isStrongPassword)}"
+     v-model="user.password" type="password" placeholder="Password.."> <br>
      <div v-if="user.password != '' && !isStrongPassword">Weak password!</div> <br>
-    <input :class="{'valid': isPasswordConfirmed === true , 'invalid': isPasswordConfirmed === false }"
-     v-model="user.confirmPassword" type="text" placeholder="Confirm password"> <br>
+    <input  :class="{ 'passwordConfirmed': user.password != user.confirmPassword ,
+         'valid': isPasswordConfirmed === true , 'invalid': isPasswordConfirmed === false || (startValidationColor.confirmPassword && !isPasswordConfirmed)}"
+     v-model="user.confirmPassword" type="password" placeholder="Confirm password"> <br>
+     <div v-if="user.confirmPassword != '' && !isPasswordConfirmed">Repeat password!</div>
     <br> 
     <!--  -->
     <input :class="{'valid': isMajor === true, 'invalid': isMajor === false}"
-     type="number" v-model="user.age" placeholder="Age.."  > <br>
+     type="number"  min="0" v-model="user.age" placeholder="Age.."  > <br>
      <div v-if="user.age != null && !isMajor && user.age < 18">You must be Major!</div>
      <br>
-
+     <div>
+         <input v-model="isMaleChecked"
+          id="Male" type="checkbox"  @change="onChangeSex('Male')">
+         <label for="Male">{{ user.sex }}</label>
+         <input v-model="isFemaleChecked"
+          type="checkbox" @change="onChangeSex('Female')">
+     </div>
+         
     <br>
     <button @click="register">Register</button>
  </div>
@@ -29,10 +39,18 @@
 </template>
 
 <script setup>
-import {ref, reactive, computed, watch} from 'vue';
+import {ref, reactive, computed} from 'vue';
 
 const startValidation = ref(false);
-const startValidationColor = ref(false);
+const startValidationColor = reactive({
+    email: false,
+    password: false,
+    confirmPassword: false,
+    age: false, 
+    sex: false,
+    spanish: false
+
+});
 
 const user = reactive({
     email: "",
@@ -44,35 +62,72 @@ const user = reactive({
 
 });
 
+//
+const isMaleChecked = ref(false);
+const isFemaleChecked = ref(false);
 
-// const email = ref('');
-// const password = ref('');
-// const confirmPassword = ref('');
+const onChangeSex = (sex) => {
+if (sex === 'Male') {
+    user.sex = 'Male';
+    isMaleChecked.value = true;
+    isFemaleChecked.value = false;
+  };
+  if (sex === 'Female') {
+    user.sex = 'Female';
+    isMaleChecked.value = false;
+    isFemaleChecked.value = true;
+  };
+};
 
 function register() {
     startValidation.value = true;
-    startValidationColor.value = true;
+    startValidationColor.email = true;
+    startValidationColor.password = true;
+    startValidationColor.confirmPassword = true;
+    startValidationColor.age = true;
+    startValidationColor.sex = true;
+    startValidationColor.spanish = true;
+
 
     if (isValidEmail.value === true && isStrongPassword.value === true
      && isPasswordConfirmed.value === true && isMajor.value === true) {
         alert("Registering...");
-    };
+        console.log(user);
+    }else {
+      alert("You have some error in the Form...");
+
+    }
 };
 
 const isValidEmail = computed(() => {   
- return startValidation.value ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.email)
-                              : null;
+ 
+  if(user.email != ""){
+    startValidationColor.email = true;
+  };
+
+ return user.email ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.email) : null;
  });
     
 const isStrongPassword = computed(() => {
+
+    if(user.password != ""){
+    startValidationColor.password = true;
+  };
 //* it must include uppercase, lowercase, number, letters,
 // special characters, lenght 8 or more, (can includes white space)
- return startValidation.value ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(user.password)
+ return user.password ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(user.password)
                               : null;
  });
 
 const isPasswordConfirmed = computed(() => {
- return startValidation.value ? user.password === user.confirmPassword
+
+
+   if(user.confirmPassword != "" && user.password != user.confirmPassword){
+   startValidationColor.confirmPassword = true;
+  }
+  
+
+ return user.confirmPassword ? user.password === user.confirmPassword
                               : null;
  });
 
@@ -80,48 +135,6 @@ const isPasswordConfirmed = computed(() => {
  return startValidation.value ? user.age >= 18
                               : null;
  });
-
-
-// Watcher para actualizar las propiedades computadas cuando cambian los valores del input
-// watch(
-//   () => user.email,
-//   () => {
-//     if (startValidation.value) {
-//       isValidEmail.value = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-//         user.email
-//       );
-//     }
-//   }
-// );
-
-// watch(
-//   () => user.password,
-//   () => {
-//     if (startValidation.value) {
-//       isStrongPassword.value = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(
-//         user.password
-//       );
-//     }
-//   }
-// );
-
-// watch(
-//   () => user.confirmPassword,
-//   () => {
-//     if (startValidation.value) {
-//       isPasswordConfirmed.value = user.password === user.confirmPassword;
-//     }
-//   }
-// );
-
-// watch(
-//   () => user.age,
-//   () => {
-//     if (startValidation.value) {
-//       isMajor.value = user.age >= 18;
-//     }
-//   }
-// );
 
 
 </script>
@@ -135,6 +148,12 @@ const isPasswordConfirmed = computed(() => {
 
 .title > span {
   color: rgb(238, 238, 17);
+}
+
+.passwordConfirmed:focus {
+    background: url('/icons8-x-16.png') no-repeat right;
+    background-color: tomato;
+    background-size: 20px 20px;
 }
 
 .valid {
