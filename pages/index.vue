@@ -1,5 +1,5 @@
 <template>
-    <p>I will display &#9728;</p>
+    <h1 class="title"><span>&#9728;</span> Validation Form <span>&#9728;</span></h1>
 
     <div>
     <input :class="{'valid': isValidEmail === true , 'invalid': isValidEmail === false }"
@@ -52,6 +52,15 @@ const isPasswordConfirmed = computed(() => {
 </script>
 
 <style lang="css" scope>
+
+.title{
+    font-size: 26px;
+    color: orange;
+}
+
+.title > span {
+  color: rgb(238, 238, 17);
+}
 
 .valid {
     background: url('emblemok_103757.svg') no-repeat right;
