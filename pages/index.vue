@@ -1,6 +1,7 @@
 <template>
-    <h1 class="title"><span>&#9728;</span> Validation Form <span>&#9728;</span></h1>
-
+    <h1 class="title">
+        <span>&#9728;</span> Validation Form <span>&#9728;</span>
+    </h1>
     <div>
     <input :class="{'valid': isValidEmail === true , 'invalid': isValidEmail === false }"
      v-model="email" type="text" placeholder="Email.."> <span class="spanCheckEmail" v-if="isValidEmail">&#10003;</span>
@@ -14,6 +15,11 @@
     <br>
     <button @click="register">Register</button>
  </div>
+  <li>
+    <nuxt-link to="/user-form">
+      Go to User Form
+    </nuxt-link>
+  </li>
 </template>
 
 <script setup>
@@ -70,7 +76,7 @@ const isPasswordConfirmed = computed(() => {
 
 .invalid {
     background: url('/icons8-x-16.png') no-repeat right;
-    background-color: red;
+    background-color: tomato;
     background-size: 20px 20px;
 }
 
