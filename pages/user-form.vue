@@ -1,9 +1,9 @@
 
 <template>
     <h1 class="title"><span>&#9728;</span> Validation User Form <span>&#9728;</span></h1>
-    <div>
+    <form  @submit.prevent="register">
     <input :class="{'valid': isValidEmail === true, 'invalid': isValidEmail === false || (startValidationColor.email && !isValidEmail)}"
-     v-model="user.email" type="text" placeholder="Email.."> <span class="spanCheckEmail" v-if="isValidEmail">&#10003;</span>
+     v-model="user.email" type="text" placeholder="Email..">
       <br>
     <div  v-if="user.email != '' && !isValidEmail ">Invalid email address!</div> <br>
 
@@ -27,11 +27,19 @@
          <input v-model="isFemaleChecked"
           type="checkbox" @change="onChangeSex('Female')">
      </div>
-         
+     <div>
+        <label for="dev">What developer are you?</label> &nbsp; 
+        <select v-model="user.dev" id="dev">
+            <option value="">..</option>
+            <option value="Front-end">Front-end</option>
+            <option value="Back-end">Back-end</option>
+            <option value="DevOps">DevOps</option>
+        </select> 
+     </div>
     <br>
-    <button @click="register">Register</button>
- </div>
-  <li>
+    <button type="submit">Register</button>
+    </form>
+  <li>  
     <nuxt-link to="/">
         Go to Home
     </nuxt-link>
@@ -48,7 +56,7 @@ const startValidationColor = reactive({
     confirmPassword: false,
     age: false, 
     sex: false,
-    spanish: false
+    dev: false
 
 });
 
@@ -58,7 +66,7 @@ const user = reactive({
     confirmPassword: "",
     age: null, 
     sex: "",
-    spanish: null
+    dev: ""
 
 });
 
@@ -86,13 +94,14 @@ function register() {
     startValidationColor.confirmPassword = true;
     startValidationColor.age = true;
     startValidationColor.sex = true;
-    startValidationColor.spanish = true;
+    startValidationColor.dev = true;
 
 
     if (isValidEmail.value === true && isStrongPassword.value === true
-     && isPasswordConfirmed.value === true && isMajor.value === true) {
+     && isPasswordConfirmed.value === true && isMajor.value === true
+     && user.sex && user.dev ) {
         alert("Registering...");
-        console.log(user);
+   console.log(JSON.stringify(user, null, 2));
     }else {
       alert("You have some error in the Form...");
 
@@ -120,7 +129,6 @@ const isStrongPassword = computed(() => {
  });
 
 const isPasswordConfirmed = computed(() => {
-
 
    if(user.confirmPassword != "" && user.password != user.confirmPassword){
    startValidationColor.confirmPassword = true;
@@ -168,17 +176,6 @@ const isPasswordConfirmed = computed(() => {
     background-size: 20px 20px;
 }
 
-.spanCheckEmail {
- display: inline-block;
-  width: 15px;
-  height: 15px;
-  background-color: #4CAF50; 
-  color: white;
-  border-radius: 5px;
-  padding: 0px 3px 8px 3px;
-  text-align: center;
-  justify-content: center;
-  }
 </style>
 
 

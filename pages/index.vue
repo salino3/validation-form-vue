@@ -2,19 +2,19 @@
     <h1 class="title">
         <span>&#9728;</span> Validation Form <span>&#9728;</span>
     </h1>
-    <div>
+    <form  @submit.prevent="register" >
     <input :class="{'valid': isValidEmail === true , 'invalid': isValidEmail === false }"
      v-model="email" type="text" placeholder="Email.."> <span class="spanCheckEmail" v-if="isValidEmail">&#10003;</span>
       <br>
     <div v-if="email != '' && !isValidEmail">Invalid email address!</div> <br>
     <input :class="{'valid': isStrongPassword === true , 'invalid': isStrongPassword === false }"
-     v-model="password" type="text" placeholder="Password.."> <br>
+     v-model="password" type="password" placeholder="Password.."> <br>
      <div v-if="password != '' && !isStrongPassword">Weak password!</div> <br>
     <input :class="{'valid': isPasswordConfirmed === true , 'invalid': isPasswordConfirmed === false }"
-     v-model="confirmPassword" type="text" placeholder="Confirm password"> <br>
+     v-model="confirmPassword" type="password" placeholder="Confirm password"> <br>
     <br>
-    <button @click="register">Register</button>
- </div>
+    <button type="submit">Register</button>
+    </form>
   <li>
     <nuxt-link to="/user-form">
       Go to User Form
