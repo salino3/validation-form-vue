@@ -1,5 +1,5 @@
 <template>
-    <h1 class="title">
+    <h1 class="title ">
         <span>&#9728;</span> Validation Form <span>&#9728;</span>
     </h1>
     <form  @submit.prevent="register" >
@@ -15,11 +15,6 @@
     <br>
     <button type="submit">Register</button>
     </form>
-  <li>
-    <nuxt-link to="/user-form">
-      Go to User Form
-    </nuxt-link>
-  </li>
 </template>
 
 <script setup>
@@ -59,6 +54,7 @@ const isPasswordConfirmed = computed(() => {
 
 <style lang="css" scope>
 
+
 .title{
     font-size: 26px;
     color: orange;
@@ -91,4 +87,5 @@ const isPasswordConfirmed = computed(() => {
   text-align: center;
   justify-content: center;
   }
+
 </style>

@@ -21,12 +21,16 @@
      <span class="errorText" v-if="user.age != null && !isMajor && user.age < 18">You must be Major!</span>
      <br>
      <div>
+      <p>Your sex:</p>
+      <label for="Male">Male</label>
          <input v-model="isMaleChecked"
-          id="Male" type="checkbox"  @change="onChangeSex('Male')">
-         <label for="Male">{{ user.sex }}</label>
+          id="Male" type="checkbox" class="inputCheckBox"  @change="onChangeSex('Male')">
+         &nbsp;
+          <label for="Famel">Famale</label> 
          <input v-model="isFemaleChecked"
-          type="checkbox" @change="onChangeSex('Female')">
+          type="checkbox" class="inputCheckBox"  @change="onChangeSex('Female')">
      </div>
+     <br>
      <div>
         <label for="dev">What developer are you?</label> &nbsp; 
         <select v-model="user.dev" id="dev">
@@ -39,11 +43,6 @@
     <br>
     <button type="submit" :disabled="!startValidation" >Register</button>
     </form>
-  <li>  
-    <nuxt-link to="/">
-        Go to Home
-    </nuxt-link>
-  </li>
 </template>
 
 <script setup>
