@@ -5,20 +5,20 @@
     <input :class="{'valid': isValidEmail === true, 'invalid': isValidEmail === false || (startValidationColor.email && !isValidEmail)}"
      v-model="user.email" type="text" placeholder="Email..">
       <br>
-    <div  v-if="user.email != '' && !isValidEmail ">Invalid email address!</div> <br>
+    <span class="errorText" v-if="user.email != '' && !isValidEmail ">Invalid email address!</span> <br>
 
     <input :class="{'valid': isStrongPassword === true , 'invalid': isStrongPassword === false  || (startValidationColor.password && !isStrongPassword)}"
      v-model="user.password" type="password" placeholder="Password.."> <br>
-     <div v-if="user.password != '' && !isStrongPassword">Weak password!</div> <br>
+     <span class="errorText"  v-if="user.password != '' && !isStrongPassword">Weak password!</span> <br>
     <input  :class="{ 'passwordConfirmed': user.password != user.confirmPassword ,
          'valid': isPasswordConfirmed === true , 'invalid': isPasswordConfirmed === false || (startValidationColor.confirmPassword && !isPasswordConfirmed)}"
      v-model="user.confirmPassword" type="password" placeholder="Confirm password"> <br>
-     <div v-if="user.confirmPassword != '' && !isPasswordConfirmed">Repeat password!</div>
+     <span class="errorText" v-if="user.confirmPassword != '' && !isPasswordConfirmed">Repeat password!</span>
     <br> 
     <!--  -->
-    <input :class="{'valid': isMajor === true, 'invalid': isMajor === false}"
+    <input :class="{'valid': isMajor === true, 'invalid': isMajor === false || (startValidationColor.age && !isMajor || (user.age != null && !isMajor && user.age < 18))}"
      type="number"  min="0" v-model="user.age" placeholder="Age.."  > <br>
-     <div v-if="user.age != null && !isMajor && user.age < 18">You must be Major!</div>
+     <span class="errorText" v-if="user.age != null && !isMajor && user.age < 18">You must be Major!</span>
      <br>
      <div>
          <input v-model="isMaleChecked"
@@ -37,7 +37,7 @@
         </select> 
      </div>
     <br>
-    <button type="submit">Register</button>
+    <button type="submit" :disabled="!startValidation" >Register</button>
     </form>
   <li>  
     <nuxt-link to="/">
@@ -134,7 +134,6 @@ const isPasswordConfirmed = computed(() => {
    startValidationColor.confirmPassword = true;
   }
   
-
  return user.confirmPassword ? user.password === user.confirmPassword
                               : null;
  });
@@ -174,6 +173,10 @@ const isPasswordConfirmed = computed(() => {
     background: url('/icons8-x-16.png') no-repeat right;
     background-color: tomato;
     background-size: 20px 20px;
+}
+
+.errorText {
+  color: red;
 }
 
 </style>
