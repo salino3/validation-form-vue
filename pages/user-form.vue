@@ -1,4 +1,6 @@
-
+<!--
+78UU+*yy 
+-->
 <template>
     <h1 class="title"><span>&#9728;</span> Validation User Form <span>&#9728;</span></h1>
     <form  @submit.prevent="register">
@@ -16,7 +18,7 @@
      <span class="errorText" v-if="user.confirmPassword != '' && !isPasswordConfirmed">Repeat password!</span>
     <br> 
     <!--  -->
-    <input :class="{'valid': isMajor === true, 'invalid': isMajor === false || (startValidationColor.age && !isMajor || (user.age != null && !isMajor && user.age < 18))}"
+    <input :class="{'valid': user.age >= 18 , 'invalid': isMajor === false || (startValidationColor.age && !isMajor || (user.age != null && !isMajor && user.age < 18))}"
      type="number"  min="0" v-model="user.age" placeholder="Age.."  > <br>
      <span class="errorText" v-if="user.age != null && !isMajor && user.age < 18">You must be Major!</span>
      <br>
@@ -41,7 +43,7 @@
         </select> 
      </div>
     <br>
-    <button type="submit" :disabled="!startValidation" >Register</button>
+    <button type="submit" :disabled="startValidation" >Register</button>
     </form>
 </template>
 
@@ -103,8 +105,15 @@ function register() {
    console.log(JSON.stringify(user, null, 2));
     }else {
       alert("You have some error in the Form...");
-
-    }
+      console.log(user);
+    };
+      startValidation.value = false;
+      // user.email = "";
+      // user.password = "";
+      // user.confirmPassword = "";
+      // user.age = null;
+      // user.sex = "";
+      // user.dev = "";
 };
 
 const isValidEmail = computed(() => {   
@@ -138,6 +147,11 @@ const isPasswordConfirmed = computed(() => {
  });
 
  const isMajor = computed(() => {
+
+  if(user.age != null){
+    startValidationColor.age = false;
+  }
+
  return startValidation.value ? user.age >= 18
                               : null;
  });

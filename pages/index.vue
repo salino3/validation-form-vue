@@ -13,7 +13,7 @@
     <input :class="{'valid': isPasswordConfirmed === true , 'invalid': isPasswordConfirmed === false }"
      v-model="confirmPassword" type="password" placeholder="Confirm password"> <br>
     <br>
-    <button type="submit">Register</button>
+    <button :disabled="startValidation" type="submit">Register</button>
     </form>
 </template>
 
@@ -32,22 +32,23 @@ function register() {
     if (isValidEmail.value === true && isStrongPassword.value === true && isPasswordConfirmed.value === true) {
         alert("Registering...");
     };
+    startValidation.value = false;
 };
 
 const isValidEmail = computed(() => {   
- return startValidation.value ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)
+ return email.value ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)
                               : null;
  });
 
 const isStrongPassword = computed(() => {
 //* it must include uppercase, lowercase, number, letters,
 // special characters, lenght 8 or more, (can includes white space)
- return startValidation.value ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(password.value)
+ return password.value ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(password.value)
                               : null;
  });
 
 const isPasswordConfirmed = computed(() => {
- return startValidation.value ? password.value === confirmPassword.value
+ return confirmPassword.value ? password.value === confirmPassword.value
                               : null;
  });
 </script>
