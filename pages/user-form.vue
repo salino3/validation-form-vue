@@ -3,7 +3,7 @@
 -->
 <template>
     <h1 class="title"><span>&#9728;</span> Validation User Form <span>&#9728;</span></h1>
-    <form  @submit.prevent="register">
+    <form class="myForm"  @submit.prevent="register">
     <input :class="{'valid': isValidEmail === true, 'invalid': isValidEmail === false || (startValidationColor.email && !isValidEmail)}"
      v-model="user.email" type="text" placeholder="Email..">
       <br>
@@ -22,18 +22,7 @@
      type="number"  min="0" v-model="user.age" placeholder="Age.."  > <br>
      <span class="errorText" v-if="user.age != null && !isMajor && user.age < 18">You must be Major!</span>
      <br>
-     <div>
-      <p>Your sex:</p>
-      <label for="Male">Male</label>
-         <input v-model="isMaleChecked"
-          id="Male" type="checkbox" class="inputCheckBox"  @change="onChangeSex('Male')">
-         &nbsp;
-          <label for="Famel">Famale</label> 
-         <input v-model="isFemaleChecked"
-          type="checkbox" class="inputCheckBox"  @change="onChangeSex('Female')">
-     </div>
-     <br>
-     <div>
+      <div>
         <label for="dev">What developer are you?</label> &nbsp; 
         <select v-model="user.dev" id="dev">
             <option value="">..</option>
@@ -41,6 +30,17 @@
             <option value="Back-end">Back-end</option>
             <option value="DevOps">DevOps</option>
         </select> 
+     </div>
+      <br>
+     <div>
+        <p>Your sex:</p>
+        <label for="Male">Male</label>
+         <input v-model="isMaleChecked"
+          id="Male" type="checkbox" class="inputCheckBox"  @change="onChangeSex('Male')">
+         &nbsp;
+          <label for="Famel">Famale</label> 
+         <input v-model="isFemaleChecked"
+          type="checkbox" class="inputCheckBox"  @change="onChangeSex('Female')">
      </div>
     <br>
     <button type="submit" :disabled="startValidation" >Register</button>
@@ -107,13 +107,8 @@ function register() {
       alert("You have some error in the Form...");
       console.log(user);
     };
-      startValidation.value = false;
-      // user.email = "";
-      // user.password = "";
-      // user.confirmPassword = "";
-      // user.age = null;
-      // user.sex = "";
-      // user.dev = "";
+      startValidation.value = true;
+      
 };
 
 const isValidEmail = computed(() => {   
@@ -160,6 +155,31 @@ const isPasswordConfirmed = computed(() => {
 </script>
 
 <style lang="css" scope>
+
+.muForm input{
+  
+    border-radius: 8px;
+    padding: 3px;
+    align-self: center;
+}
+
+.myForm button {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+  color:blue;
+  background: rgb(232, 208, 208);;
+  border-radius: 8px;
+  padding: 4px;
+  margin-top: 20px;
+}
+
+.myForm {
+  border: solid rgb(38, 132, 38, 0.7) 3px;
+  border-radius: 10px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+}
 
 .title{
     font-size: 26px;
